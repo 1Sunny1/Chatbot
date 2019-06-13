@@ -16,7 +16,8 @@ private:
 	void startDialogue();
 	std::string getUserInput();
 	std::string answerToTheUser(std::string &);
-	
+	std::string findKeyword(std::string &);
+
 public:
 	Chatbot();
 	~Chatbot() = default;

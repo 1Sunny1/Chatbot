@@ -17,7 +17,7 @@ Chatbot::Chatbot() {
 	pickNameForChatbot();
 	startDialogue();
 	std::string userInput = getUserInput();
-	while (userInput != "exit") {
+	while (userInput != "exit" && userInput != "Exit") {
 		std::cout << answerToTheUser(userInput) << '\n';
 		userInput = getUserInput();
 	}
@@ -45,7 +45,7 @@ void Chatbot::pickNameForChatbot() {
 }
 
 void Chatbot::startDialogue() {
-	std::cout << "Hello, i am " << chatbotName << ". How can i help you? :)\n";
+	std::cout << "[type \"exit\" if you want to exit.]\nHello, i am " << chatbotName << ". How can i help you? :)\n";
 }
 
 std::string Chatbot::getUserInput() {
@@ -54,16 +54,34 @@ std::string Chatbot::getUserInput() {
 	return tempString;
 }
 
-std::string Chatbot::answerToTheUser(std::string & userIn) {
-	if ( std::search(userIn.begin(), userIn.end(),
-		std::boyer_moore_searcher(x.begin(), x.end()))) 
+template <typename Container>
+bool in_quote(const Container& cont, const std::string& s)
+{
+	return std::search(cont.begin(), cont.end(), s.begin(), s.end()) != cont.end();
+}
+
+std::string Chatbot::findKeyword(std::string & userIn) {
+	for (auto & keyword : listOfKeyWords)
+		if (std::includes(userIn.begin(), userIn.end(),
+			keyword.begin(), keyword.end())) //
+			return keyword;
+}
+
+std::string Chatbot::answerToTheUser(std::string & userInput) {
+	if (findKeyword(userInput) == listOfKeyWords[0])
 		return "Kinda hot today.";
-	else if (userIn.find("joke") && userIn.find("Joke"))
-		return "java.";
+	else if (findKeyword(userInput) == listOfKeyWords[1])
+		return "I am busy talking :)";
+	else if (findKeyword(userInput) == listOfKeyWords[2])
+		return "Why java programmers wear glasses? Because they can't C#!";
+	else if (findKeyword(userInput) == listOfKeyWords[3])
+		return "It is not so healthy snack. You should better eat some green!";
+	else if (findKeyword(userInput) == listOfKeyWords[4])
+		return "It's important, You should drink at least two liters per day.";
 	else
 		return "sorry i don't understand.";
 
-	/* */
+	/*XD*/
 
 
 }
