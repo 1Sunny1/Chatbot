@@ -4,11 +4,19 @@
 #include <cstdio>
 #include <algorithm>
 #include <functional>
+#include <iterator>
+#include <map>
 
 std::mt19937 gen{ std::random_device{}() };
 template<typename T>
 T random(T min, T max) {
 	return std::uniform_int_distribution<T>{min, max}(gen);
+}
+
+template <typename Container>
+bool doUserSentenceContainKeyword(const Container& cont, const std::string& s)
+{
+	return std::search(cont.begin(), cont.end(), s.begin(), s.end()) != cont.end();
 }
 
 Chatbot::Chatbot() {
@@ -54,22 +62,20 @@ std::string Chatbot::getUserInput() {
 	return tempString;
 }
 
-template <typename Container>
-bool in_quote(const Container& cont, const std::string& s)
-{
-	return std::search(cont.begin(), cont.end(), s.begin(), s.end()) != cont.end();
-}
-
-std::string Chatbot::findKeyword(std::string & userIn) {
-	for (auto & keyword : listOfKeyWords)
-		if (std::includes(userIn.begin(), userIn.end(),
-			keyword.begin(), keyword.end())) //
+std::string Chatbot::findKeyword(const std::string & userIn) {
+	for (auto keyword : listOfKeyWords) {
+		if (doUserSentenceContainKeyword(userIn, keyword))
 			return keyword;
+		if (keyword == listOfKeyWords.back())
+			return "No keyword found"; 
+		else
+			continue;
+	}
 }
 
-std::string Chatbot::answerToTheUser(std::string & userInput) {
+std::string Chatbot::answerToTheUser(const std::string & userInput) {
 	if (findKeyword(userInput) == listOfKeyWords[0])
-		return "Kinda hot today.";
+		return "Today is kinda hot";
 	else if (findKeyword(userInput) == listOfKeyWords[1])
 		return "I am busy talking :)";
 	else if (findKeyword(userInput) == listOfKeyWords[2])
@@ -78,10 +84,17 @@ std::string Chatbot::answerToTheUser(std::string & userInput) {
 		return "It is not so healthy snack. You should better eat some green!";
 	else if (findKeyword(userInput) == listOfKeyWords[4])
 		return "It's important, You should drink at least two liters per day.";
+	else if (findKeyword(userInput) == listOfKeyWords[5])
+		return "I don't have any before you :)";
+	else if (findKeyword(userInput) == listOfKeyWords[6])
+		return "smth";
+	else if (findKeyword(userInput) == listOfKeyWords[7])
+		return "smth";
+	else if (findKeyword(userInput) == listOfKeyWords[8])
+		return "smth";
 	else
 		return "sorry i don't understand.";
 
-	/*XD*/
-
-
+	
+	/*gonna be refactored*/
 }
