@@ -1,2 +1,2 @@
 # Chatbot
-Single chatbot based on keywords.
+Simple chatbot based on keywords.
